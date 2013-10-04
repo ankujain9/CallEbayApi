@@ -59,7 +59,7 @@ public class PlaceOffer extends HttpServlet {
 					}
 					finalPrice = getBidIncrements(price);
 				}
-
+				System.out.println(request.getParameter("amount"));
 				ApiContext apiContext = GetApiContext.getApiContext();
 				PlaceOfferCall apiCall = new PlaceOfferCall(apiContext);
 				apiCall.setItemID(itemId);
@@ -81,6 +81,9 @@ public class PlaceOffer extends HttpServlet {
 				SellingStatusType sellingStatus = apiCall.placeOffer();
 				Double currentPrice = sellingStatus.getCurrentPrice()
 						.getValue();
+				System.out.println("cr " +currentPrice);
+				System.out.println("fr " +finalPrice);
+
 				if (currentPrice <= finalPrice) {
 					status = 0;
 				} else {
