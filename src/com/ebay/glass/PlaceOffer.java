@@ -41,44 +41,62 @@ public class PlaceOffer extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter pw = response.getWriter();
 		try {
-			String itemId = request.getParameter("itemId");
+			int status = 1;
+			String message = "Congrats you are highest bidder";
+			JSONObject jobj = new JSONObject();
 
-			Double finalPrice = 0.0;
-			if (request.getParameter("amount") != null) {
-				finalPrice = Double.parseDouble((String) request
-						.getParameter("amount"));
-			} else {
-				Double price = getCurrentPrice(itemId);
-				finalPrice = getBidIncrements(price);
+			try {
+				String itemId = request.getParameter("itemId");
+				Double finalPrice = 0.0;
+				if (request.getParameter("amount") != null) {
+					finalPrice = Double.parseDouble((String) request
+							.getParameter("amount"));
+				} else {
+					Double price = getCurrentPrice(itemId);
+					finalPrice = getBidIncrements(price);
+				}
+
+				ApiContext apiContext = GetApiContext.getApiContext();
+				PlaceOfferCall apiCall = new PlaceOfferCall(apiContext);
+				apiCall.setItemID(itemId);
+
+				OfferType offer = new OfferType();
+				offer.setAction(BidActionCodeType.BID);
+
+				AmountType amount = new AmountType();
+				amount.setCurrencyID(CurrencyCodeType.USD);
+				amount.setValue(finalPrice);
+
+				offer.setMaxBid(amount);
+				offer.setQuantity(1);
+				apiCall.setOffer(offer);
+
+				apiCall.setEndUserIP("195.34.23.32");
+
+				System.out.println("Begin to cal eBay API, please wait ... ");
+				SellingStatusType sellingStatus = apiCall.placeOffer();
+				Double currentPrice = sellingStatus.getCurrentPrice()
+						.getValue();
+				if (currentPrice <= finalPrice) {
+					status = 0;
+				} else {
+					status = 1;
+					message = "Sorry! you got outbid. You need to bid atleast "
+							+ sellingStatus.getMinimumToBid().getValue()
+							+ "USD.";
+				}
+				System.out.println("End to cal eBay API, show call result ...");
+			} catch (Exception e) {
+				System.out.println("Fail to get eBay official time.");
+				message = "Your bid was lesser than the current price of the item";
+				e.printStackTrace();
 			}
-
-			ApiContext apiContext = GetApiContext.getApiContext();
-			PlaceOfferCall apiCall = new PlaceOfferCall(apiContext);
-			apiCall.setItemID(itemId);
-
-			OfferType offer = new OfferType();
-			offer.setAction(BidActionCodeType.BID);
-
-			AmountType amount = new AmountType();
-			amount.setCurrencyID(CurrencyCodeType.USD);
-			amount.setValue(finalPrice);
-
-			offer.setMaxBid(amount);
-			offer.setQuantity(1);
-			apiCall.setOffer(offer);
-
-			apiCall.setEndUserIP("195.34.23.32");
-
-			System.out.println("Begin to cal eBay API, please wait ... ");
-			SellingStatusType sellingStatus = apiCall.placeOffer();
-			pw.print(0);
-			System.out.println("End to cal eBay API, show call result ...");
-		} catch (Exception e) {
-			System.out.println("Fail to get eBay official time.");
-			pw.print(1);
-			e.printStackTrace();
+			jobj.put("ack", status);
+			jobj.put("message", message);
+			pw.println(jobj);
+		} catch (JSONException je) {
+			pw.print("error");
 		}
-
 	}
 
 	/**
