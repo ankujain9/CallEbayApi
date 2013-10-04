@@ -53,6 +53,10 @@ public class PlaceOffer extends HttpServlet {
 							.getParameter("amount"));
 				} else {
 					Double price = getCurrentPrice(itemId);
+					if (price == 0) {
+						pw.println("error in fetching the item");
+						return;
+					}
 					finalPrice = getBidIncrements(price);
 				}
 
@@ -88,6 +92,7 @@ public class PlaceOffer extends HttpServlet {
 				System.out.println("End to cal eBay API, show call result ...");
 			} catch (Exception e) {
 				System.out.println("Fail to get eBay official time.");
+				status = 2;
 				message = "Your bid was lesser than the current price of the item";
 				e.printStackTrace();
 			}
@@ -125,15 +130,18 @@ public class PlaceOffer extends HttpServlet {
 	}
 
 	private Double getBidIncrements(Double price) {
-
-		if (price < 10) {
+		if (price <= .99) {
+			return price + .05;
+		} else if (price >= 1 && price <= 4.99) {
+			return price + .25;
+		} else if (price >= 5 && price <= 24.99) {
+			return price + .5;
+		} else if (price >= 25 && price <= 99.99) {
 			return price + 1;
-		} else if (price >= 10 && price < 25) {
-			return price + 2;
-		} else if (price >= 25 && price < 100) {
-			return price + 3;
+		} else if (price >= 100 && price <= 249.99) {
+			return price + 2.5;
 		} else {
-			return price + 5;
+			return price + 5.0;
 		}
 	}
 }
