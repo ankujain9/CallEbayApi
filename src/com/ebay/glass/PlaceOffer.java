@@ -95,7 +95,7 @@ public class PlaceOffer extends HttpServlet {
 			} catch (Exception e) {
 				System.out.println("Fail to get eBay official time.");
 				status = 2;
-				message = "Your Bid < current price";
+				message = "Your Bid price is too low";
 				e.printStackTrace();
 			}
 			jobj.put("ack", status);
