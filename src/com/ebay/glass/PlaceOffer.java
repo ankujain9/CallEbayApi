@@ -54,7 +54,7 @@ public class PlaceOffer extends HttpServlet {
 				} else {
 					Double price = getCurrentPrice(itemId);
 					if (price == 0) {
-						pw.println("error in fetching the item");
+						pw.println("error");
 						return;
 					}
 					finalPrice = getBidIncrements(price);
@@ -118,8 +118,8 @@ public class PlaceOffer extends HttpServlet {
 			JSONObject itemDetails = GetItemDetails.getItemDetails(itemId);
 			Double price;
 
-			price = (Double) itemDetails
-					.get("Item.ConvertedCurrentPrice.Value");
+			price = itemDetails.getJSONObject("Item")
+					.getJSONObject("ConvertedCurrentPrice").getDouble("Value");
 			return price;
 
 		} catch (JSONException e) {
