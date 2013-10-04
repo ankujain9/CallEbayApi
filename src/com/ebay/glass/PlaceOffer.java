@@ -42,7 +42,7 @@ public class PlaceOffer extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		try {
 			int status = 1;
-			String message = "Congrats you are highest bidder";
+			String message = "U R highest bidder";
 			JSONObject jobj = new JSONObject();
 
 			try {
@@ -88,15 +88,14 @@ public class PlaceOffer extends HttpServlet {
 					status = 0;
 				} else {
 					status = 1;
-					message = "Sorry! you got outbid. You need to bid atleast "
-							+ sellingStatus.getMinimumToBid().getValue()
-							+ "USD.";
+					message = "Outbid. Bid atleast $"
+							+ sellingStatus.getMinimumToBid().getValue();
 				}
 				System.out.println("End to cal eBay API, show call result ...");
 			} catch (Exception e) {
 				System.out.println("Fail to get eBay official time.");
 				status = 2;
-				message = "Your bid was lesser than the current price of the item";
+				message = "Your Bid < current price";
 				e.printStackTrace();
 			}
 			jobj.put("ack", status);
