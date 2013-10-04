@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="WebApp_ID" version="2.4" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="WebApp_ID" version="2.4" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <display-name>CallEbayApi</display-name>
     <servlet>
         <description/>
@@ -12,6 +13,18 @@
         <servlet-name>GetTime</servlet-name>
         <servlet-class>com.ebay.glass.GetTime</servlet-class>
     </servlet>
+    <servlet>
+        <description/>
+        <display-name>PlaceOfferNow</display-name>
+        <servlet-name>PlaceOfferNow</servlet-name>
+        <servlet-class>com.ebay.glass.PlaceOffer</servlet-class>
+    </servlet>
+    <servlet>
+        <description/>
+        <display-name>GetItem</display-name>
+        <servlet-name>GetItem</servlet-name>
+        <servlet-class>com.ebay.glass.GetItem</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetLists</servlet-name>
         <url-pattern>/GetLists</url-pattern>
@@ -19,6 +32,14 @@
     <servlet-mapping>
         <servlet-name>GetTime</servlet-name>
         <url-pattern>/GetTime</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PlaceOfferNow</servlet-name>
+        <url-pattern>/PlaceOfferNow</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetItem</servlet-name>
+        <url-pattern>/GetItem</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

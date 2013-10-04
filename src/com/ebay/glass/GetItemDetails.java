@@ -29,7 +29,7 @@ public class GetItemDetails {
 		return http_client;
 	}
 	
-	public static void getItemDetails(String itemId) {
+	public static JSONObject getItemDetails(String itemId) {
 
 		String result = null;
 		try {
@@ -47,13 +47,13 @@ public class GetItemDetails {
 		}
 
 		try {
-			JSONObject item = new JSONObject(result);
+			return new JSONObject(result);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Response from Server " + result);
-		
+		return null;
 	}
 	
 	public static void main(String args[]){
